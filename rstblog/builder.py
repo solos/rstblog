@@ -10,6 +10,7 @@
 """
 import re
 import os
+import sys
 import posixpath
 from fnmatch import fnmatch
 from urlparse import urlparse
@@ -30,6 +31,7 @@ from rstblog.signals import before_file_processed, \
 from rstblog.modules import find_module
 from rstblog.programs import RSTProgram, CopyProgram
 
+default_encode = sys.getfilesystemencoding()
 
 OUTPUT_FOLDER = '_build'
 builtin_programs = {
@@ -50,6 +52,7 @@ class Context(object):
         self.summary = None
         self.pub_date = None
         self.source_filename = source_filename
+        self.source_filename = source_filename.decode(default_encode)
         self.links = []
         self.program_name = self.config.get('program')
         if self.program_name is None:
