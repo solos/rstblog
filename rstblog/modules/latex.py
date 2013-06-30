@@ -96,8 +96,9 @@ def render_math(context, math):
         if not os.path.isdir(directory):
             os.makedirs(directory)
         dvipng_args = ['dvipng', '-o', full_filename, '-T', 'tight', '-z9',
-                       '-D', str(int(context.builder.config.root_get(
-                            'modules.latex.font_size', 16) * 72.27 / 10)),
+                       '-D',
+                       str(int(context.builder.config.root_get(
+                           'modules.latex.font_size', 16) * 72.27 / 10)),
                        '-bg', 'Transparent',
                        '--depth', os.path.join(tempdir, 'math.dvi')]
         p = Popen(dvipng_args, stdout=PIPE, stderr=PIPE)

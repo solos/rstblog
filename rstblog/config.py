@@ -68,6 +68,7 @@ class Config(object):
         layer = {}
         rv = Config()
         rv.stack = self.stack + [layer]
+
         def _walk(d, prefix):
             for key, value in d.iteritems():
                 if isinstance(value, dict):

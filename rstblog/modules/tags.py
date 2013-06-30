@@ -16,7 +16,7 @@ from jinja2 import contextfunction
 from werkzeug.contrib.atom import AtomFeed
 
 from rstblog.signals import after_file_published, \
-     before_build_finished
+    before_build_finished
 
 
 class Tag(object):

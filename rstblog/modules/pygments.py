@@ -10,7 +10,7 @@
 """
 from __future__ import absolute_import
 from rstblog.signals import before_file_processed, \
-     before_build_finished
+    before_build_finished
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
@@ -51,7 +51,8 @@ def write_stylesheet(builder, **kwargs):
 
 def setup(builder):
     global html_formatter
-    style = get_style_by_name(builder.config.root_get('modules.pygments.style'))
+    style = get_style_by_name(
+        builder.config.root_get('modules.pygments.style'))
     html_formatter = HtmlFormatter(style=style)
     directives.register_directive('code-block', CodeBlock)
     directives.register_directive('sourcecode', CodeBlock)

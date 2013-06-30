@@ -22,12 +22,12 @@ from jinja2 import Environment, FileSystemLoader, Markup
 from babel import Locale, dates
 
 from werkzeug.routing import Map, Rule
-from werkzeug import url_unquote
+from werkzeug import url_unquote as unquot
 
 from rstblog.signals import before_file_processed, \
-     before_template_rendered, before_build_finished, \
-     before_file_built, after_file_prepared, \
-     after_file_published
+    before_template_rendered, before_build_finished, \
+    before_file_built, after_file_prepared, \
+    after_file_published
 from rstblog.modules import find_module
 from rstblog.programs import RSTProgram, CopyProgram
 
@@ -78,11 +78,11 @@ class Context(object):
 
     @property
     def slug(self):
-        directory, filename = os.path.split(self.source_filename)
+        dir, filename = os.path.split(self.source_filename)
         basename, ext = os.path.splitext(filename)
         if basename == 'index':
-            return posixpath.join(directory, basename).rstrip('/').replace('\\', '/')
-        return posixpath.join(directory, basename).replace('\\', '/')
+            return posixpath.join(dir, basename).rstrip('/').replace('\\', '/')
+        return posixpath.join(dir, basename).replace('\\', '/')
 
     def make_destination_folder(self):
         folder = self.destination_folder
@@ -180,7 +180,8 @@ class BuildError(ValueError):
 
 
 class Builder(object):
-    default_ignores = ('.*', '_*', 'config.yml', 'Makefile', 'README', '*.conf', )
+    default_ignores = (
+        '.*', '_*', 'config.yml', 'Makefile', 'README', '*.conf')
     default_programs = {
         '*.rst':    'rst'
     }
@@ -197,12 +198,13 @@ class Builder(object):
         parsed = urlparse(self.config.root_get('canonical_url'))
         self.prefix_path = parsed.path
         self.url_adapter = self.url_map.bind('dummy.invalid',
-            script_name=self.prefix_path)
+                                             script_name=self.prefix_path)
         self.register_url('page', '/<path:slug>')
 
-        template_path = os.path.join(self.project_folder,
+        template_path = os.path.join(
+            self.project_folder,
             self.config.root_get('template_path') or
-                self.default_template_path)
+            self.default_template_path)
         self.locale = Locale(self.config.root_get('locale') or 'en')
         self.jinja_env = Environment(
             loader=FileSystemLoader([template_path, builtin_templates]),
@@ -217,7 +219,7 @@ class Builder(object):
         )
 
         self.static_folder = self.config.root_get('static_folder') or \
-                             self.default_static_folder
+            self.default_static_folder
 
         for module in self.config.root_get('active_modules') or []:
             mod = find_module(module)
@@ -234,7 +236,7 @@ class Builder(object):
         return self.url_adapter.build(_key, values)
 
     def get_link_filename(self, _key, **values):
-        link = url_unquote(self.link_to(_key, **values).lstrip('/')).encode('utf-8')
+        link = unquot(self.link_to(_key, **values).lstrip('/')).encode('utf-8')
         if not link or link.endswith('/'):
             link += 'index.html'
         return os.path.join(self.default_output_folder, link)
